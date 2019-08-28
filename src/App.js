@@ -8,10 +8,12 @@ function App() {
     <Router>
       <Switch>
         <Route path="/" exact render={(props)=>{
+          console.log(props);
           return  <Redirect {...props} to="/app"></Redirect>
         }}></Route>
         <Route path="/login"></Route>
         <Route path="/app" render={(props) => {
+          console.log(props);
           return (
             <Home></Home>
           );
