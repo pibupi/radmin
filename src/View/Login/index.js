@@ -13,8 +13,16 @@ class Login extends Component {
               </div>
             </div>
           </div>
-          <div className="main-bd"></div>
-          <div className="main-ft"></div>
+          <div className="main-bd">
+            <div className="login-box-wrap">
+              <div className="login-box container">
+                登录盒子
+              </div>
+            </div>
+          </div>
+          <div className="main-ft">
+            &copy;版权所有 aicoder.com 2016-2019
+          </div>
       </div>
     )
   }
