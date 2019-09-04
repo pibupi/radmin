@@ -16,7 +16,20 @@ class Login extends Component {
           <div className="main-bd">
             <div className="login-box-wrap">
               <div className="login-box container">
-                登录盒子
+                <div className="login-group">
+                  <div className="input-group">
+                    <input type="text"/>
+                  </div>
+                  <div className="input-group">
+                    <input type="text"/>
+                  </div>
+                  <div className="input-group">
+                    <input type="text"/>
+                  </div>
+                </div>
+                <div className="login-aside">
+                  右侧
+                </div>
               </div>
             </div>
           </div>
