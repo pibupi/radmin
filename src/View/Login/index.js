@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
+import ICON_USER from '../../assets/img/icon_user.gif';
+import ICON_LOCK from '../../assets/img/icon_lock.jpg';
 import './login.scss';
 class Login extends Component {
   render () {
@@ -18,10 +20,12 @@ class Login extends Component {
               <div className="login-box container">
                 <div className="login-group">
                   <div className="input-group">
-                    <input type="text"/>
+                    <img src={ICON_USER} alt="用户名"/>
+                    <input placeholder="请输入电话号码" type="text"/>
                   </div>
-                  <div className="input-group">
-                    <input type="text"/>
+                  <div className="input-group grey-border">
+                    <img src={ICON_LOCK} alt="用户名"/>
+                    <input placeholder="请输入密码" type="text"/>
                   </div>
                   <div className="input-group">
                     <input type="text"/>
