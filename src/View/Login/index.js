@@ -4,6 +4,9 @@ import ICON_USER from '../../assets/img/icon_user.gif';
 import ICON_LOCK from '../../assets/img/icon_lock.jpg';
 import './login.scss';
 class Login extends Component {
+  changeCode(e) {
+    e.target.src = '/api/code?id=' + Date.now();
+  }
   render () {
     return (
       <div className="login">
@@ -29,7 +32,9 @@ class Login extends Component {
                   </div>
                   <div className="code-group input-group">
                     <input type="text" placeholder="请输入验证码" className="code"/>
-                    <div className="img-code">img</div>
+                    <div className="img-code">
+                      <img onClick={ e => this.changeCode(e) } src="/api/code" alt=""/>
+                    </div>
                   </div>
                   <div className="login-btn-grop">
                     登录
