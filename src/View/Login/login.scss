@@ -61,7 +61,7 @@
             box-sizing: border-box;
             border: 2px solid #D7E0EF;
             width: 306px;
-            margin: 10px auto;
+            margin: 20px auto;
             border-radius: 4px;
             position: relative;
             img {
@@ -86,6 +86,41 @@
           }
           .grey-border {
             border: 2px solid #f1f1f1 !important;
+          }
+          .code-group {
+            border:  none;
+            .code {
+              border: 2px solid #eee;
+              float: left;
+              width: 160px;
+              border-radius: 5px;
+              box-sizing: border-box;
+              padding-left: 18px;
+            }
+            .img-code {
+              width: 126px;
+              height: 34px;
+              margin: 0 0 0 20px;
+              border: 2px solid #eee;
+              border-radius: 5px;
+              float: left;
+              box-sizing: border-box;
+            }
+          }
+          .login-btn-grop {
+            height: 38px;
+            width: 306px;
+            background-color: #ff8532;
+            margin: 50px auto 0;
+            line-height: 38px;
+            color: #fff;
+            border-radius: 5px;
+          }
+          .link-group {
+            height: 44px;
+            font-size: 14px;
+            line-height: 44px;
+            color: #999;
           }
         }
         .login-aside {

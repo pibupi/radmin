@@ -27,8 +27,15 @@ class Login extends Component {
                     <img src={ICON_LOCK} alt="用户名"/>
                     <input placeholder="请输入密码" type="text"/>
                   </div>
-                  <div className="input-group">
-                    <input type="text"/>
+                  <div className="code-group input-group">
+                    <input type="text" placeholder="请输入验证码" className="code"/>
+                    <div className="img-code">img</div>
+                  </div>
+                  <div className="login-btn-grop">
+                    登录
+                  </div>
+                  <div className="link-group">
+                    忘记密码?
                   </div>
                 </div>
                 <div className="login-aside">
