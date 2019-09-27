@@ -44,7 +44,8 @@ class Login extends Component {
                   </div>
                 </div>
                 <div className="login-aside">
-                  右侧
+                  <p>还没注册？</p>
+                  <p className="active">立即注册>></p>
                 </div>
               </div>
             </div>

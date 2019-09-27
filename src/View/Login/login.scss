@@ -122,6 +122,7 @@
             line-height: 38px;
             color: #fff;
             border-radius: 5px;
+            cursor: pointer;
           }
           .link-group {
             height: 44px;
@@ -132,6 +133,20 @@
         }
         .login-aside {
           flex: 1;
+        }
+      }
+      .login-aside {
+        line-height: 22px;
+        padding: 120px 0 0 200px;
+        text-align: left;
+        p {
+          height: 22px;
+          font-size: 18px;
+          color: #323232;
+        }
+        .active {
+          color: #ff8532;
+          cursor: pointer;
         }
       }
     }
