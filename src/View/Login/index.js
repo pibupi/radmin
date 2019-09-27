@@ -4,6 +4,18 @@ import ICON_USER from '../../assets/img/icon_user.gif';
 import ICON_LOCK from '../../assets/img/icon_lock.jpg';
 import './login.scss';
 class Login extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      username: '',
+      password: '',
+      code: ''
+    }
+  }
+  handlerChange = e => {
+    let newState = { [e.target.name]: e.target.value};
+    this.setState(state => ({...state, ...newState}));
+  }
   changeCode(e) {
     e.target.src = '/api/code?id=' + Date.now();
   }
@@ -24,14 +36,14 @@ class Login extends Component {
                 <div className="login-group">
                   <div className="input-group">
                     <img src={ICON_USER} alt="用户名"/>
-                    <input placeholder="请输入电话号码" type="text"/>
+                    <input name="username" onChange={this.handlerChange} value={this.state.username} placeholder="请输入电话号码" type="text"/>
                   </div>
                   <div className="input-group grey-border">
                     <img src={ICON_LOCK} alt="用户名"/>
-                    <input placeholder="请输入密码" type="text"/>
+                    <input type="password" name="password" onChange={this.handlerChange} value={this.state.password} placeholder="请输入密码" />
                   </div>
                   <div className="code-group input-group">
-                    <input type="text" placeholder="请输入验证码" className="code"/>
+                    <input name="code" onChange={this.handlerChange} value={this.state.code} type="text" placeholder="请输入验证码" className="code"/>
                     <div className="img-code">
                       <img onClick={ e => this.changeCode(e) } src="/api/code" alt=""/>
                     </div>
