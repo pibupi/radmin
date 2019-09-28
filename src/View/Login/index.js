@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import TextValidator from '../../Components/TextValidator';
+import service from '../../Service';
+import { SaveLoginUserInfo } from '../../Common/Auth';
 import ICON_USER from '../../assets/img/icon_user.gif';
 import ICON_LOCK from '../../assets/img/icon_lock.jpg';
 import './login.scss';
 import { ValidatorForm } from 'react-form-validator-core';
+import { message } from 'antd';
 class Login extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      username: '',
-      password: '',
-      code: ''
+      username: '18911112222',
+      password: 'aicoder.com',
+      code: '22222'
     }
   }
   handlerChange = e => {
@@ -22,7 +25,18 @@ class Login extends Component {
     e.target.src = '/api/code?id=' + Date.now();
   }
   handleSubmit =() => {
-    console.log('submit');
+    // console.log('submit');
+    service.userLogin(this.state)
+    .then(res => {
+      // console.log(res.data);
+      if(res.data.code === 1) {
+        // 保存用户登录信息
+        SaveLoginUserInfo(res.data.user);
+        // 跳转到请求之前的页面。
+      } else {
+        message.error('登录失败，请输入正确的用户名密码！');
+      }
+    });
   }
   render () {
     return (
@@ -62,8 +76,8 @@ class Login extends Component {
                       onChange={this.handlerChange} 
                       value={this.state.password} 
                       placeholder="请输入密码" 
-                      validators={['required', 'matchRegexp:^[0-9a-zA-Z]{6,8}$']}
-                      errorMessages={['*密码是必填项！', '*请输入6-8']}
+                      validators={['required', 'matchRegexp:^[0-9a-zA-Z.]{6,20}$']}
+                      errorMessages={['*密码是必填项！', '*请输入6-20']}
                     />
                   </div>
                   <div className="code-group input-group">
@@ -74,8 +88,8 @@ class Login extends Component {
                       type="text" 
                       placeholder="请输入验证码" 
                       className="code"
-                      validators={['required', 'matchRegexp:^[0-9a-zA-Z]{6}$']}
-                      errorMessages={['*验证码是必填项！', '*请输入6个字符验证码！']}
+                      validators={['required', 'matchRegexp:^[0-9a-zA-Z]{5}$']}
+                      errorMessages={['*验证码是必填项！', '*请输入5个字符验证码！']}
                     />
                     <div className="img-code">
                       <img onClick={ e => this.changeCode(e) } src="/api/code" alt=""/>

@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
 import { ValidatorComponent } from 'react-form-validator-core';
-import { spawn } from 'child_process';
 
 class TextValidator extends ValidatorComponent {
   errorText() {
