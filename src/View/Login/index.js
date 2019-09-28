@@ -26,6 +26,7 @@ class Login extends Component {
   }
   handleSubmit =() => {
     // console.log('submit');
+    let { history } = this.props;
     service.userLogin(this.state)
     .then(res => {
       // console.log(res.data);
@@ -33,6 +34,7 @@ class Login extends Component {
         // 保存用户登录信息
         SaveLoginUserInfo(res.data.user);
         // 跳转到请求之前的页面。
+        history.push('/home');
       } else {
         message.error('登录失败，请输入正确的用户名密码！');
       }
