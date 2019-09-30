@@ -8,6 +8,7 @@ import ICON_LOCK from '../../assets/img/icon_lock.jpg';
 import './login.scss';
 import { ValidatorForm } from 'react-form-validator-core';
 import { message } from 'antd';
+import { urlParams2Object } from '../../Common/Helper';
 class Login extends Component {
   constructor (props) {
     super(props)
@@ -25,8 +26,7 @@ class Login extends Component {
     e.target.src = '/api/code?id=' + Date.now();
   }
   handleSubmit =() => {
-    // console.log('submit');
-    let { history } = this.props;
+    let { history, location } = this.props;
     service.userLogin(this.state)
     .then(res => {
       // console.log(res.data);
@@ -34,7 +34,15 @@ class Login extends Component {
         // 保存用户登录信息
         SaveLoginUserInfo(res.data.user);
         // 跳转到请求之前的页面。
-        history.push('/home');
+        let url = '/home';
+        // 判断当前请求地址中是否有 preurl。
+        if(location.search) {
+          let params = urlParams2Object(location.search);
+          if(params.preurl) {
+            url = params.preurl;
+          }
+        }
+        history.push(url);
       } else {
         message.error('登录失败，请输入正确的用户名密码！');
       }
