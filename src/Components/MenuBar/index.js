@@ -5,12 +5,12 @@ const { SubMenu } = Menu;
 
 class MenuBar extends Component {
   state = {
-    current: 'user_mgr'
+    current: ''
   }
   handleMenuClick = e => {
-    console.log(e);
     // 控制路由跳转
     this.setState({current: e.key})
+    this.props.history.push(`/home/${e.key}`);
   }
   render () {
     return (
