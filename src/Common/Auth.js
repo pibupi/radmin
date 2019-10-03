@@ -22,3 +22,24 @@ export function AuthLogin() {
 export function SaveLoginUserInfo(user) {
   sessionStorage.setItem(APP_LOGIN_USER, JSON.stringify(user));
 }
+
+/**
+ * 获取当前用户登录的信息
+ * @return {Object} user
+ */
+export function GetLoginUserInfo() {
+  let userStr = sessionStorage.getItem(APP_LOGIN_USER);
+  if(userStr) {
+    return JSON.parse(userStr);
+  } 
+  return null;
+}
+
+/**
+ * 当前用户登出，处理后续的相关的信息
+ * @return {Object} user
+ */
+export function Logout() {
+ sessionStorage.clear(); // 清空所有的用户登录的相关信息
+}
+
