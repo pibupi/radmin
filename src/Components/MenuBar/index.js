@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Menu } from 'antd';
+import { Menu, Icon } from 'antd';
 const { SubMenu } = Menu;
 
 class MenuBar extends Component {
@@ -21,17 +21,24 @@ class MenuBar extends Component {
           mode="inline"
         >
           <SubMenu
-            title="后台管理"
+            title={
+              <span>
+                <Icon type="pie-chart" />
+                后台管理
+              </span>
+            }
           >
-            <Menu.Item key="user_mgr">用户管理</Menu.Item>
-            <Menu.Item key="role_mgr">角色管理</Menu.Item>
-            <Menu.Item key="per_mgr">权限管理</Menu.Item>
+            <Menu.Item key="user_mgr"><Icon type="codepen-circle" />用户管理</Menu.Item>
+            <Menu.Item key="role_mgr"> <Icon type="google" />角色管理</Menu.Item>
+            <Menu.Item key="per_mgr"> <Icon type="dribbble" />权限管理</Menu.Item>
           </SubMenu>
           <SubMenu
-            title="商铺管理"
+            title={
+              <span><Icon type="ant-design" />商铺管理</span>
+            }
           >
-            <Menu.Item key="goods_mgr">商品管理</Menu.Item>
-            <Menu.Item key="order_mgr">订单管理</Menu.Item>
+            <Menu.Item key="goods_mgr"><Icon type="bug" />商品管理</Menu.Item>
+            <Menu.Item key="order_mgr"><Icon type="cloud" />订单管理</Menu.Item>
           </SubMenu>
 
         </Menu>
