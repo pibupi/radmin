@@ -8,7 +8,7 @@ import store from '../../../store';
 class UserMgr extends Component {
   state = {
     unsubscribe: null,
-    userlist: store.getState().UserList,
+    userlist: store.getState().UserList.list,
     total: 0,
     params: {_page: 1, _limit: 6},
     columns: [{
@@ -27,7 +27,8 @@ class UserMgr extends Component {
   }
 
   userListChange = () => {
-    this.setState({userlist: store.getState().UserList});
+    const UserList = store.getState().UserList;
+    this.setState({userlist: UserList.list, total: UserList.total});
   }
   componentDidMount() {
     // 发送ajax请求到后台，获取当前用户的列表数据
@@ -52,8 +53,11 @@ class UserMgr extends Component {
 
   changePage = (page, pageSize) => {
     // console.log('page:', page, ',pageSize:', pageSize);
-    this.setState({params: {_page: page, _limit: pageSize}})
-    store.dispatch(LoadUserActionAsync(this.state.params));
+    this.setState(preState=> {
+      return {...preState, ...{params: {_page: page, _limit: pageSize}}}
+    }, ()=> {
+      store.dispatch(LoadUserActionAsync(this.state.params));
+    });
   }
 
   render () {
