@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import TextValidator from '../../Components/TextValidator';
 import service from '../../Service';
-import { SaveLoginUserInfo } from '../../Common/Auth';
+import { SaveLoginUserInfo, saveLoginTocken } from '../../Common/Auth';
 import ICON_USER from '../../assets/img/icon_user.gif';
 import ICON_LOCK from '../../assets/img/icon_lock.jpg';
 import './login.scss';
@@ -33,6 +33,8 @@ class Login extends Component {
       if(res.data.code === 1) {
         // 保存用户登录信息
         SaveLoginUserInfo(res.data.user);
+        // 保存用户的登录后，后台返回的tocken。身份信息。
+        saveLoginTocken(res.data.token);
         // 跳转到请求之前的页面。
         let url = '/home';
         // 判断当前请求地址中是否有 preurl。

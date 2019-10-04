@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Breadcrumb, Table } from 'antd';
 import { Link } from 'react-router-dom';
+import service from '../../../Service';
 class UserMgr extends Component {
   state = {
     userlist: [{
@@ -29,6 +30,14 @@ class UserMgr extends Component {
       title: '电话',
       dataIndex: 'phone'
     }]
+  }
+
+  componentDidMount() {
+    // 发送ajax请求到后台，获取当前用户的列表数据
+    service.loadUserList()
+    .then(res => {
+      this.setState({userlist: res.data});
+    })
   }
 
   userRowSelection = {

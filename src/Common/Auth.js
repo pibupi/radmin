@@ -43,3 +43,19 @@ export function Logout() {
  sessionStorage.clear(); // 清空所有的用户登录的相关信息
 }
 
+/**
+ * 保存用户登录后台的tocken信息
+ * @param {String} tocken 请求的身份
+ */
+export function saveLoginTocken(tocken) {
+  sessionStorage.setItem('Authorization', tocken);
+}
+
+/**
+ * 获取用户登录后台的tocken信息
+ * @return {String} tocken 请求的身份
+ */
+export function getLoginTocken(tocken) {
+  return sessionStorage.getItem('Authorization');
+}
+

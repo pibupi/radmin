@@ -6,9 +6,17 @@ import MenuBar from '../../Components/MenuBar';
 import UserMgr from '../Admin/UserMgr';
 import RoleMgr from '../Admin/RoleMgr';
 import PerMgr from '../Admin/PerMgr';
-
+import axios from 'axios';
+import { getLoginTocken } from '../../Common/Auth';
 const { Header, Footer, Sider, Content } = Layout;
+
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    // 设置当前用户ajax请求的token
+    axios.defaults.headers['Authorization'] = getLoginTocken();
+  }
+  
   render () {
     const {match} = this.props;
     return (
