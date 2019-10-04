@@ -11,7 +11,7 @@ export function LoadUserAction(payload) {
 // redux-thunk用法： 
 export function LoadUserActionAsync(params) {
   return dispatch => {
-    return service.loadUserList()
+    return service.loadUserList(params)
       .then(res => {
         dispatch(LoadUserAction(res.data));
       })

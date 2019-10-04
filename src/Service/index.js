@@ -3,7 +3,7 @@ export default {
   userLogin(data) {
     return axios.post('/api/userlogin', data);
   },
-  loadUserList() {
-    return axios.get('/per/user')
+  loadUserList(params) {
+    return axios.get('/per/user', {params: params});
   }
 }

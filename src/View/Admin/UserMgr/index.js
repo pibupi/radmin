@@ -9,6 +9,8 @@ class UserMgr extends Component {
   state = {
     unsubscribe: null,
     userlist: store.getState().UserList,
+    total: 0,
+    params: {_page: 1, _limit: 6},
     columns: [{
       key: 'id',
       title: '编号',
@@ -33,7 +35,7 @@ class UserMgr extends Component {
     // .then(res => {
     //   this.setState({userlist: res.data});
     // })
-    store.dispatch(LoadUserActionAsync({}));
+    store.dispatch(LoadUserActionAsync(this.state.params));
     const unsubscribe = store.subscribe(this.userListChange);
     this.setState({unsubscribe: unsubscribe});
   }
@@ -47,6 +49,13 @@ class UserMgr extends Component {
       console.log(selectedRowKeys, selectedRows);
     }
   }
+
+  changePage = (page, pageSize) => {
+    // console.log('page:', page, ',pageSize:', pageSize);
+    this.setState({params: {_page: page, _limit: pageSize}})
+    store.dispatch(LoadUserActionAsync(this.state.params));
+  }
+
   render () {
     return (
       <div className="admin-usermgr">
@@ -66,6 +75,7 @@ class UserMgr extends Component {
           columns={this.state.columns}
           rowSelection={this.userRowSelection}
           rowKey="id"
+          pagination = {{total: this.state.total, pageSize: 6, defaultCurrent: 1, onChange: this.changePage}}
         ></Table>
       </div>
     )
