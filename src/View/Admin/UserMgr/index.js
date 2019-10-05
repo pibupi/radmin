@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
-import { Breadcrumb, Table } from 'antd';
+import { Breadcrumb, Table, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { LoadUserActionAsync } from '../../../Action/UserAction';
+import AddUser from './AddUser';
 // import service from '../../../Service';
 import store from '../../../store';
 
 class UserMgr extends Component {
   state = {
+    showAddUserDialog: false,
     unsubscribe: null,
     userlist: store.getState().UserList.list,
     total: 0,
@@ -60,6 +62,11 @@ class UserMgr extends Component {
     });
   }
 
+  hideAddUserDialog = () => {
+    this.setState({showAddUserDialog: false});
+  }
+  buttonStyle = {margin: '5px'};
+
   render () {
     return (
       <div className="admin-usermgr">
@@ -72,6 +79,9 @@ class UserMgr extends Component {
           </Breadcrumb.Item>
         </Breadcrumb>
         <hr/>
+        <Button onClick={()=> this.setState({showAddUserDialog: true})} style={this.buttonStyle} type="primary">添加</Button>
+        <Button style={this.buttonStyle} type="danger">删除</Button>
+        <Button style={this.buttonStyle} type="primary">修改</Button>
         <Table
           bordered
           style={{backgroundColor: '#FEFEFE'}}
@@ -81,6 +91,7 @@ class UserMgr extends Component {
           rowKey="id"
           pagination = {{total: this.state.total, pageSize: 6, defaultCurrent: 1, onChange: this.changePage}}
         ></Table>
+        <AddUser close={this.hideAddUserDialog} visible={this.state.showAddUserDialog}></AddUser>
       </div>
     )
   }
