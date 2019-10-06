@@ -3,6 +3,7 @@ import { Form, Input, Icon, Upload, Button } from 'antd';
 import { getLoginTocken } from '../../../Common/Auth';
 class AddUserFrm extends Component {
   handleChangeAvatar = (e) => {
+    this.props.changeFileList(e.fileList);
     if(e.file.response) {
       console.log(e.file.response);
       return e.file.response.img;
@@ -34,6 +35,7 @@ class AddUserFrm extends Component {
               name="imgF"
               listType="picture"
               onChange={this.handleChangeAvatar}
+              fileList={this.props.fileList}
             >
               <Button>上传头像</Button>
             </Upload>

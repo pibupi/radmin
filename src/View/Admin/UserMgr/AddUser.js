@@ -7,6 +7,7 @@ import { AddUserActionAsync } from '../../../Action/UserAction';
 const AddUserFrmComponent = Form.create({name: 'adduser_frm'})(AddUserFrm);
 class AddUser extends Component {
   userAddFrm = null;
+  state = { fileList: []}
   handleSubmit = () => {
     this.userAddFrm.validateFields((err, data) => {
       // console.log(data);
@@ -33,8 +34,14 @@ class AddUser extends Component {
   }
 
   hanldeCloseModal = () => {
+    // 清空所有添加的表单。
     this.userAddFrm.resetFields();
+    // 清理上传文件
+    this.setState({fileList: []});
     this.props.close();
+  }
+  changeFileList = (fileList) => {
+    this.setState({fileList});
   }
 
   render () {
@@ -47,7 +54,11 @@ class AddUser extends Component {
         onCancel={this.hanldeCloseModal}
         onOk={this.handleSubmit}
       >
-        <AddUserFrmComponent ref={frm => this.userAddFrm = frm }></AddUserFrmComponent>
+        <AddUserFrmComponent
+          ref={frm => this.userAddFrm = frm }
+          fileList={this.state.fileList}
+          changeFileList={this.changeFileList}
+        ></AddUserFrmComponent>
       </Modal>
     )
   }

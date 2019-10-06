@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Breadcrumb, Table, Button, Modal, message } from 'antd';
+import { Breadcrumb, Table, Button, Modal, message, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import { LoadUserActionAsync } from '../../../Action/UserAction';
 import AddUser from './AddUser';
@@ -26,6 +26,15 @@ class UserMgr extends Component {
       key: 'phone',
       title: '电话',
       dataIndex: 'phone'
+    }, {
+      key: 'username',
+      title: '登录名',
+      dataIndex: 'username'
+    }, {
+      key: 'avatar',
+      title: '头像',
+      dataIndex: 'avatar',
+      render: (avatar) => <Avatar src={avatar}></Avatar>
     }]
   }
 
