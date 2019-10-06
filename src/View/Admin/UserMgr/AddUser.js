@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import {Modal} from 'antd';
+import { Modal, Form } from 'antd';
+import AddUserFrm from './AddUserFrm';
 
+const AddUserFrmComponent = Form.create({name: 'adduser_frm'})(AddUserFrm);
 class AddUser extends Component {
   render () {
     return (
@@ -11,7 +13,7 @@ class AddUser extends Component {
         visible={this.props.visible}
         onCancel={()=>this.props.close()}
       >
-        添加用户
+        <AddUserFrmComponent></AddUserFrmComponent>
       </Modal>
     )
   }
