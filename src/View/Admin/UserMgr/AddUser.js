@@ -4,6 +4,17 @@ import AddUserFrm from './AddUserFrm';
 
 const AddUserFrmComponent = Form.create({name: 'adduser_frm'})(AddUserFrm);
 class AddUser extends Component {
+  userAddFrm = null;
+  handleSubmit = () => {
+    this.userAddFrm.validateFields(function(err, data){
+      // console.log(err);
+      // console.log(data);
+      if(!err) {
+        // ajax
+      }
+    })
+  }
+
   render () {
     return (
       <Modal
@@ -11,9 +22,13 @@ class AddUser extends Component {
         okText="确定"
         cancelText="取消"
         visible={this.props.visible}
-        onCancel={()=>this.props.close()}
+        onCancel={()=> {
+          this.userAddFrm.resetFields();
+          this.props.close();
+        }}
+        onOk={this.handleSubmit}
       >
-        <AddUserFrmComponent></AddUserFrmComponent>
+        <AddUserFrmComponent ref={frm => this.userAddFrm = frm }></AddUserFrmComponent>
       </Modal>
     )
   }
