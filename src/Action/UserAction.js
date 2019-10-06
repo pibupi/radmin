@@ -17,3 +17,18 @@ export function LoadUserActionAsync(params) {
       })
   }
 }
+
+export function AddUserAction(payload) {
+  return {
+    type: ActionTypes.ADD_USER,
+    payload
+  }
+}
+export function AddUserActionAsync(payload) {
+  return dispatch => {
+    return service.addUser(payload)
+      .then(res => {
+        dispatch(AddUserAction(res.data));
+      })
+  }
+}
