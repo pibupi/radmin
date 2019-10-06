@@ -84,6 +84,20 @@ class AddUserFrm extends Component {
             />
           )}
         </Form.Item>
+        <Form.Item label="电话">
+          {getFieldDecorator('phone', {
+            rules: [
+              {
+                pattern: /\d{11}/gi,
+                message: '请输入11个字符!',
+              }
+            ],
+          })(
+            <Input prefix={<Icon type="phone"></Icon>} 
+              placeholder="电话"
+            />
+          )}
+        </Form.Item>
       </Form>
     )
   }
