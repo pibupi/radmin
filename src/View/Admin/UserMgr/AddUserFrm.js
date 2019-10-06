@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
-import { Form, Input, Icon } from 'antd';
-
+import { Form, Input, Icon, Upload, Button } from 'antd';
+import { getLoginTocken } from '../../../Common/Auth';
 class AddUserFrm extends Component {
+  handleChangeAvatar = (e) => {
+    if(e.file.response) {
+      console.log(e.file.response);
+      return e.file.response.img;
+    }
+    return '';
+  }
   render () {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -10,6 +17,28 @@ class AddUserFrm extends Component {
         labelCol={{span: 4}}
         wrapperCol={{span: 20}}
       >
+      <Form.Item label="用户头像">
+          {getFieldDecorator('avatar', {
+            getValueFromEvent: this.handleChangeAvatar,
+            rules: [
+              {
+                required: true,
+                message: '请上传图片!',
+              }
+            ],
+          })(
+            <Upload
+              accept="image/*"
+              action="/per/upload"
+              headers={{Authorization: getLoginTocken()}}
+              name="imgF"
+              listType="picture"
+              onChange={this.handleChangeAvatar}
+            >
+              <Button>上传头像</Button>
+            </Upload>
+          )}
+        </Form.Item>
         <Form.Item label="用户名">
           {getFieldDecorator('username', {
             rules: [

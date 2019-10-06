@@ -8,7 +8,7 @@ class AddUser extends Component {
   handleSubmit = () => {
     this.userAddFrm.validateFields(function(err, data){
       // console.log(err);
-      // console.log(data);
+      console.log(data);
       if(!err) {
         // ajax
       }
