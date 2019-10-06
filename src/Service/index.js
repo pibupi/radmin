@@ -9,5 +9,10 @@ export default {
   },
   addUser(data) {
     return axios.post('/per/user', data);
+  },
+  deleteUser(ids) {
+    return Promise.all(ids.map(id => {
+      return axios.delete(`/per/user/${id}`);
+    }));
   }
 }

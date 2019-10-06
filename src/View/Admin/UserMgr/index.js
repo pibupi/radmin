@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
-import { Breadcrumb, Table, Button } from 'antd';
+import { Breadcrumb, Table, Button, Modal, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { LoadUserActionAsync } from '../../../Action/UserAction';
 import AddUser from './AddUser';
-// import service from '../../../Service';
+import service from '../../../Service';
 import store from '../../../store';
 
 class UserMgr extends Component {
   state = {
     showAddUserDialog: false,
     unsubscribe: null,
+    selectRowKeys: [],
     userlist: store.getState().UserList.list,
     total: 0,
     params: {_page: 1, _limit: 6},
@@ -47,12 +48,6 @@ class UserMgr extends Component {
     this.state.unsubscribe && (this.state.unsubscribe());
   }
 
-  userRowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(selectedRowKeys, selectedRows);
-    }
-  }
-
   changePage = (page, pageSize) => {
     // console.log('page:', page, ',pageSize:', pageSize);
     this.setState(preState=> {
@@ -65,9 +60,44 @@ class UserMgr extends Component {
   hideAddUserDialog = () => {
     this.setState({showAddUserDialog: false});
   }
+
+  handleDelete = () => {
+    if(this.state.selectRowKeys.length <= 0) {
+      message.warn('请选择要删除的数据！');
+      return;
+    }
+    // 拿到所有要删除的数据
+    Modal.confirm({
+      title: '您确认要删除吗？',
+      okText: '删除',
+      cancelText: '取消',
+      onOk: () => {
+        // console.log(this.state.selectRowKeys);
+        service
+          .deleteUser(this.state.selectRowKeys)
+          .then(res => {
+            store.dispatch(LoadUserActionAsync(this.state.params));
+            message.info('删除成功！');
+            this.setState({selectRowKeys: []});
+          })
+          .catch(e => {
+            console.log(e);
+            message.error('删除失败！');
+          })
+      }
+    })
+  }
   buttonStyle = {margin: '5px'};
 
   render () {
+    let { selectRowKeys } = this.state;
+    let userRowSelection = {
+      selectedRowKeys: selectRowKeys,
+      onChange: (selectedRowKeys) => {
+        console.log(selectedRowKeys);
+        this.setState({selectRowKeys: selectedRowKeys})
+      }
+    }
     return (
       <div className="admin-usermgr">
         <Breadcrumb>
@@ -80,14 +110,14 @@ class UserMgr extends Component {
         </Breadcrumb>
         <hr/>
         <Button onClick={()=> this.setState({showAddUserDialog: true})} style={this.buttonStyle} type="primary">添加</Button>
-        <Button style={this.buttonStyle} type="danger">删除</Button>
+        <Button onClick={ this.handleDelete } style={this.buttonStyle} type="danger">删除</Button>
         <Button style={this.buttonStyle} type="primary">修改</Button>
         <Table
           bordered
           style={{backgroundColor: '#FEFEFE'}}
           dataSource={this.state.userlist}
           columns={this.state.columns}
-          rowSelection={this.userRowSelection}
+          rowSelection={userRowSelection}
           rowKey="id"
           pagination = {{total: this.state.total, pageSize: 6, defaultCurrent: 1, onChange: this.changePage}}
         ></Table>
