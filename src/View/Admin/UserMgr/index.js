@@ -170,7 +170,6 @@ class UserMgr extends Component {
         <hr/>
         <Button onClick={()=> this.setState({showAddUserDialog: true})} style={this.buttonStyle} type="primary">添加</Button>
         <Button onClick={ this.handleDelete } style={this.buttonStyle} type="danger">删除</Button>
-        <Button style={this.buttonStyle} type="primary">修改</Button>
         <Table
           bordered
           style={{backgroundColor: '#FEFEFE'}}

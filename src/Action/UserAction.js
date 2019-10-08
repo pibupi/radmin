@@ -32,3 +32,19 @@ export function AddUserActionAsync(payload) {
       })
   }
 }
+
+export function EditUserActionAsync(payload) {
+  return dispatch => {
+    return service.updateUser(payload)
+      .then(res => {
+        dispatch(EditUserAction(payload));
+      })
+  }
+}
+
+export function EditUserAction(payload) {
+  return {
+    type: ActionTypes.EDIT_USER,
+    payload
+  }
+}
