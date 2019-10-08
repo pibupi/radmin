@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Breadcrumb, Table, Button, Modal, message, Avatar } from 'antd';
+import { Breadcrumb, Table, Button, Modal, message, Avatar, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import { LoadUserActionAsync } from '../../../Action/UserAction';
 import AddUser from './AddUser';
@@ -35,9 +35,47 @@ class UserMgr extends Component {
       title: '头像',
       dataIndex: 'avatar',
       render: (avatar) => <Avatar src={avatar}></Avatar>
+    }, {
+      key: 'del',
+      title: '编辑',
+      dataIndex: 'del',
+      render: (del, row) => {
+        return (
+          <div>
+            <Button style={{marginRight: '5px'}} type="primary">编辑</Button>
+            <Popconfirm
+              onConfirm={ () => {
+                // message.info(row.id);
+                this.deleteUser(row.id);
+              }}
+              okText="确认"
+              cancelText="取消"
+              title="您确认要删除吗？"
+            >
+              <Button type="danger" >
+                删除
+              </Button>
+            </Popconfirm>
+          </div>
+        );
+      }
     }]
   }
 
+  deleteUser = (id) => {
+    service
+      .deleteUser([id])
+      .then(res => {
+        store.dispatch(LoadUserActionAsync(this.state.params));
+        message.info('删除成功！');
+        let newSelectRowKeys = this.state.selectRowKeys.filter(item => item !== id);
+        this.setState({selectRowKeys: newSelectRowKeys});
+      })
+      .catch(e => {
+        console.log(e);
+        message.error('删除失败！');
+      });
+  }
   userListChange = () => {
     const UserList = store.getState().UserList;
     this.setState({userlist: UserList.list, total: UserList.total});
