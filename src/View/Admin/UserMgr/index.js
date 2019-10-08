@@ -3,12 +3,14 @@ import { Breadcrumb, Table, Button, Modal, message, Avatar, Popconfirm } from 'a
 import { Link } from 'react-router-dom';
 import { LoadUserActionAsync } from '../../../Action/UserAction';
 import AddUser from './AddUser';
+import EditUser from './EditUser';
 import service from '../../../Service';
 import store from '../../../store';
 
 class UserMgr extends Component {
   state = {
-    showAddUserDialog: false,
+    showAddUserDialog: false,  // 显示要添加用户的对话框
+    showEditUserDialog: false, // 显示修改的对话框
     unsubscribe: null,
     selectRowKeys: [],
     userlist: store.getState().UserList.list,
@@ -42,7 +44,12 @@ class UserMgr extends Component {
       render: (del, row) => {
         return (
           <div>
-            <Button style={{marginRight: '5px'}} type="primary">编辑</Button>
+            <Button 
+              onClick={()=> this.setState({showEditUserDialog: true})}
+              style={{marginRight: '5px'}} type="primary"
+            >
+              编辑
+            </Button>
             <Popconfirm
               onConfirm={ () => {
                 // message.info(row.id);
@@ -108,6 +115,10 @@ class UserMgr extends Component {
     this.setState({showAddUserDialog: false});
   }
 
+  hideEditUserDialog = () => {
+    this.setState({showEditUserDialog: false});
+  }
+
   handleDelete = () => {
     if(this.state.selectRowKeys.length <= 0) {
       message.warn('请选择要删除的数据！');
@@ -169,6 +180,7 @@ class UserMgr extends Component {
           pagination = {{total: this.state.total, pageSize: 6, defaultCurrent: 1, onChange: this.changePage}}
         ></Table>
         <AddUser close={this.hideAddUserDialog} visible={this.state.showAddUserDialog}></AddUser>
+        <EditUser close={this.hideEditUserDialog} visible={this.state.showEditUserDialog}></EditUser>
       </div>
     )
   }
