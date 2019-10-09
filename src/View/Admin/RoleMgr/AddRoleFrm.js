@@ -16,7 +16,8 @@ class AddRoleFrm extends Component {
           {getFieldDecorator('name', {
             rules: [
               {
-                pattern: /\w{2,20}/gi,
+                min: 2,
+                max: 20,
                 message: '请输入2-20个字符!',
               },
               {

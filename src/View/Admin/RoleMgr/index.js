@@ -3,6 +3,7 @@ import { Breadcrumb, Button, Input, Table, message, Modal, Popconfirm } from 'an
 import { Link } from 'react-router-dom';
 import service from '../../../Service';
 import AddRole from './AddRole';
+import { formateDate2String } from '../../../Common/Helper';
 class RoleMgr extends Component {
   state = {
     showAddRoleDialog: false,
@@ -94,6 +95,27 @@ class RoleMgr extends Component {
   handleAdd = () => {
     this.setState({showAddRoleDialog: true});
   }
+  addRole = (role) => {
+    let newRole = Object.assign({
+      id: Date.now(),
+      del: 0,
+      subon: formateDate2String(new Date()),
+      status: 0
+    },role);
+    console.log(newRole);
+    service
+      .addRole(newRole)
+      .then(res => {
+        message.info('添加成功！');
+        // 关闭对话框
+        this.closeAddDialog();
+        this.loadData();
+      })
+      .catch(err => {
+        console.log(err);
+        message.error('添加失败！');
+      })
+  }
   handleSearch = (value) => {
     this.setState(preState => {
       preState.params.q = value;
@@ -165,7 +187,11 @@ class RoleMgr extends Component {
           }}
           pagination = {{total: this.state.total, pageSize: 6, defaultCurrent: 1, onChange: this.changePage}}
         ></Table>
-        <AddRole close={this.closeAddDialog} visible={this.state.showAddRoleDialog}></AddRole>
+        <AddRole 
+          close={this.closeAddDialog} 
+          visible={this.state.showAddRoleDialog}
+          addRole={this.addRole}
+        ></AddRole>
       </div>
     )
   }
