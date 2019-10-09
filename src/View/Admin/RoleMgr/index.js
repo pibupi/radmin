@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Breadcrumb, Button, Input, Table } from 'antd';
+import { Breadcrumb, Button, Input, Table, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 import service from '../../../Service';
 class RoleMgr extends Component {
   state = {
+    selectedRowKeys: [],
     params: {
       _page: 1,
       _limit: 6,
@@ -48,7 +49,27 @@ class RoleMgr extends Component {
       }
     }]
   }
-  handleDelete = () => {}
+  handleDelete = () => {
+    Modal.confirm({
+      title: '您确认要删除吗？',
+      okText: '删除',
+      cancelText: '取消',
+      onOk: () => {
+        // 拿到要删除的数据的id
+        service
+          .deleteRoles(this.state.selectedRowKeys)
+          .then(res => {
+            message.info('删除成功！');
+            this.loadData();
+          })
+          .catch(err => {
+            console.log(err);
+            message.error('删除失败！');
+          });
+      }
+    })
+    
+  }
   handleEdit = () => {}
   handleAdd = () => {}
   handleSearch = (value) => {
@@ -81,6 +102,7 @@ class RoleMgr extends Component {
   buttonStyle ={ margin: '5px'}
 
   render () {
+    let { selectedRowKeys } = this.state;
     return (
       <div>
          <Breadcrumb>
@@ -107,6 +129,13 @@ class RoleMgr extends Component {
           dataSource={this.state.roleList}
           columns={this.state.columns}
           rowKey="id"
+          rowSelection = {{
+            selectedRowKeys: selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+              this.setState({selectedRowKeys: selectedRowKeys});
+              console.log(selectedRowKeys);
+            }
+          }}
           pagination = {{total: this.state.total, pageSize: 6, defaultCurrent: 1, onChange: this.changePage}}
         ></Table>
       </div>
