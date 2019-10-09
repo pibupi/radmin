@@ -146,6 +146,22 @@ class UserMgr extends Component {
       }
     })
   }
+
+  handleEdit = () => {
+    if(this.state.selectRowKeys.length !== 1) {
+      message.error('请选中一条数据进行编辑！');
+      return;
+    }
+
+    // 拿到要进行编辑的数据
+    const userId = this.state.selectRowKeys[0]
+    let editUser = store.getState().UserList.list.find(item => item.id === userId);
+    console.log(editUser);
+    this.setState({
+      showEditUserDialog: true,
+      editUserRow: editUser
+    })
+  }
   buttonStyle = {margin: '5px'};
 
   render () {
@@ -170,6 +186,7 @@ class UserMgr extends Component {
         <hr/>
         <Button onClick={()=> this.setState({showAddUserDialog: true})} style={this.buttonStyle} type="primary">添加</Button>
         <Button onClick={ this.handleDelete } style={this.buttonStyle} type="danger">删除</Button>
+        <Button onClick={ this.handleEdit } style={this.buttonStyle} type="primary">编辑</Button>
         <Table
           bordered
           style={{backgroundColor: '#FEFEFE'}}
