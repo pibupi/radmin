@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Form, Input, Icon } from 'antd';
-class AddRoleFrm extends Component {
+class EditRoleFrm extends Component {
   componentDidMount() {
-    this.props.form.setFieldsValue({'pId': 0});
+    let role = this.props.data;
+    this.props.form.setFieldsValue({pId: role.pId, name: role.name, des: role.des});
   }
   render () {
     const { getFieldDecorator } = this.props.form;
@@ -65,4 +66,4 @@ class AddRoleFrm extends Component {
   }
 }
 
-export default AddRoleFrm
+export default EditRoleFrm

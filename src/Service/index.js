@@ -25,7 +25,9 @@ export default {
     return Promise.all(ids.map(id => axios.delete(`/per/role/${id}`)));
   },
   addRole(role) {
-    console.log(role);
     return axios.post('/per/role', role);
+  },
+  saveRole(role) {
+    return axios.put(`/per/role/${role.id}`, role);
   }
 }

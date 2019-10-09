@@ -3,10 +3,12 @@ import { Breadcrumb, Button, Input, Table, message, Modal, Popconfirm } from 'an
 import { Link } from 'react-router-dom';
 import service from '../../../Service';
 import AddRole from './AddRole';
+import EditRole from './EditRole';
 import { formateDate2String } from '../../../Common/Helper';
 class RoleMgr extends Component {
   state = {
     showAddRoleDialog: false,
+    showEidtRoleDialog: false,
     selectedRowKeys: [],
     params: {
       _page: 1,
@@ -45,7 +47,13 @@ class RoleMgr extends Component {
       render: (del, row) => {
         return (
           <div>
-            <Button type="primary" style={{marginRight: '5px'}}>编辑</Button>
+            <Button 
+              type="primary" 
+              style={{marginRight: '5px'}}
+              onClick={() => this.handleEdit(row)}
+            >
+              编辑
+            </Button>
             <Popconfirm
               title="您确认要删除吗？"
               okText="确认"
@@ -91,7 +99,22 @@ class RoleMgr extends Component {
     })
     
   }
-  handleEdit = () => {}
+  handleEdit = (row) => {
+    this.setState({showEidtRoleDialog: true, editRole: row});
+  }
+  saveRole = (role) => {
+    service
+      .saveRole(role)
+      .then(res => {
+        this.closeEditDialog();
+        this.loadData();
+        message.info('修改成功！');
+      })
+      .catch(err => {
+        console.log(err);
+        message.error('修改失败！');
+      })
+  }
   handleAdd = () => {
     this.setState({showAddRoleDialog: true});
   }
@@ -144,6 +167,9 @@ class RoleMgr extends Component {
   closeAddDialog = () => {
     this.setState({showAddRoleDialog: false});
   }
+  closeEditDialog = () => {
+    this.setState({showEidtRoleDialog: false});
+  }
 
   componentDidMount() {
     this.loadData();
@@ -192,6 +218,12 @@ class RoleMgr extends Component {
           visible={this.state.showAddRoleDialog}
           addRole={this.addRole}
         ></AddRole>
+        <EditRole 
+          visible={this.state.showEidtRoleDialog} 
+          close={this.closeEditDialog}
+          data={this.state.editRole}
+          saveRole={this.saveRole}
+        />
       </div>
     )
   }
