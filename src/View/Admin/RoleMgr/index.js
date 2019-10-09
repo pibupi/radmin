@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import { Breadcrumb, Button, Input, Table, message, Modal, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import service from '../../../Service';
+import AddRole from './AddRole';
 class RoleMgr extends Component {
   state = {
+    showAddRoleDialog: false,
     selectedRowKeys: [],
     params: {
       _page: 1,
@@ -89,7 +91,9 @@ class RoleMgr extends Component {
     
   }
   handleEdit = () => {}
-  handleAdd = () => {}
+  handleAdd = () => {
+    this.setState({showAddRoleDialog: true});
+  }
   handleSearch = (value) => {
     this.setState(preState => {
       preState.params.q = value;
@@ -114,6 +118,11 @@ class RoleMgr extends Component {
       this.loadData();
     })
   }
+
+  closeAddDialog = () => {
+    this.setState({showAddRoleDialog: false});
+  }
+
   componentDidMount() {
     this.loadData();
   }
@@ -156,6 +165,7 @@ class RoleMgr extends Component {
           }}
           pagination = {{total: this.state.total, pageSize: 6, defaultCurrent: 1, onChange: this.changePage}}
         ></Table>
+        <AddRole close={this.closeAddDialog} visible={this.state.showAddRoleDialog}></AddRole>
       </div>
     )
   }
