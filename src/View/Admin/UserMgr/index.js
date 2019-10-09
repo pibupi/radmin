@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Breadcrumb, Table, Button, Modal, message, Avatar, Popconfirm } from 'antd';
+import { Breadcrumb, Table, Button, Modal, message, Avatar, Popconfirm, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import { LoadUserActionAsync } from '../../../Action/UserAction';
 import AddUser from './AddUser';
@@ -103,10 +103,12 @@ class UserMgr extends Component {
     this.state.unsubscribe && (this.state.unsubscribe());
   }
 
-  changePage = (page, pageSize) => {
-    // console.log('page:', page, ',pageSize:', pageSize);
+  changePage = (page, pageSize, q="") => {
+    if(!!q) {
+      q = this.state.params.q;
+    }
     this.setState(preState=> {
-      return {...preState, ...{params: {_page: page, _limit: pageSize}}}
+      return {...preState, ...{params: {_page: page, _limit: pageSize, q}}}
     }, ()=> {
       store.dispatch(LoadUserActionAsync(this.state.params));
     });
@@ -187,6 +189,21 @@ class UserMgr extends Component {
         <Button onClick={()=> this.setState({showAddUserDialog: true})} style={this.buttonStyle} type="primary">添加</Button>
         <Button onClick={ this.handleDelete } style={this.buttonStyle} type="danger">删除</Button>
         <Button onClick={ this.handleEdit } style={this.buttonStyle} type="primary">编辑</Button>
+        <Input.Search
+          placeholder="搜索"
+          onSearch={(value) => {
+            // 第一步： 先把搜索的参数放到 state 里面去。
+            this.setState(preState => {
+              preState.params.q = value;
+              return {...preState};
+            }, () => {
+              // 第二步： 重新请求当前页数据
+              this.changePage(1, 6, value);
+            })
+          }}
+          enterButton
+          style={{margin: '5px', width: '300px'}}
+        />
         <Table
           bordered
           style={{backgroundColor: '#FEFEFE'}}
