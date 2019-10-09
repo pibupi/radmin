@@ -90,6 +90,7 @@ class RoleMgr extends Component {
           .then(res => {
             message.info('删除成功！');
             this.loadData();
+            this.setState({selectedRowKeys: []});
           })
           .catch(err => {
             console.log(err);
@@ -98,6 +99,15 @@ class RoleMgr extends Component {
       }
     })
     
+  }
+  handleBarEdit = () => {
+    if(this.state.selectedRowKeys.length !== 1) {
+      message.error('请选中一行进行编辑');
+      return;
+    }
+
+    let editRole = this.state.roleList.find(item => item.id === this.state.selectedRowKeys[0]);
+    if(editRole) this.handleEdit(editRole);
   }
   handleEdit = (row) => {
     this.setState({showEidtRoleDialog: true, editRole: row});
@@ -191,7 +201,7 @@ class RoleMgr extends Component {
         <hr/>
         <Button onClick={ this.handleAdd } style={this.buttonStyle} type="primary">添加</Button>
         <Button onClick={ this.handleDelete } style={this.buttonStyle} type="danger">删除</Button>
-        <Button onClick={ this.handleEdit } style={this.buttonStyle} type="primary">编辑</Button>
+        <Button onClick={ this.handleBarEdit } style={this.buttonStyle} type="primary">编辑</Button>
         <Input.Search
           placeholder="搜索"
           onSearch = { this.handleSearch }
