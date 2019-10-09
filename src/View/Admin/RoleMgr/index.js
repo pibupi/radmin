@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Breadcrumb, Button, Input, Table, message, Modal } from 'antd';
+import { Breadcrumb, Button, Input, Table, message, Modal, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import service from '../../../Service';
 class RoleMgr extends Component {
@@ -42,8 +42,26 @@ class RoleMgr extends Component {
       render: (del, row) => {
         return (
           <div>
-            <Button type="primary">编辑</Button>
-            <Button type="danger">删除</Button>
+            <Button type="primary" style={{marginRight: '5px'}}>编辑</Button>
+            <Popconfirm
+              title="您确认要删除吗？"
+              okText="确认"
+              cancelText="取消"
+              onConfirm={() => {
+                service
+                  .deleteRoles([row.id])
+                  .then(res => {
+                    message.info('删除成功！');
+                    this.loadData();
+                  })
+                  .catch(err => {
+                    console.log(err);
+                    message.error('删除失败！');
+                  });
+              }}
+            >
+              <Button type="danger">删除</Button>
+            </Popconfirm>
           </div>
         );
       }
