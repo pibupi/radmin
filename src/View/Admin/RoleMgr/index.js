@@ -51,12 +51,29 @@ class RoleMgr extends Component {
   handleDelete = () => {}
   handleEdit = () => {}
   handleAdd = () => {}
+  handleSearch = (value) => {
+    this.setState(preState => {
+      preState.params.q = value;
+      return {...preState};
+    }, () => {
+      this.loadData();
+    });
+  }
   loadData = () => {
     service
       .loadRoleList(this.state.params)
       .then(res => {
         this.setState({roleList: res.data, total: parseInt(res.headers['x-total-count'])});
       });
+  }
+  changePage = (page, pageSize) => {
+    this.setState(preState => {
+      preState.params._page = page;
+      preState.params._limit = pageSize;
+      return {...preState};
+    }, () => {
+      this.loadData();
+    })
   }
   componentDidMount() {
     this.loadData();
@@ -80,6 +97,7 @@ class RoleMgr extends Component {
         <Button onClick={ this.handleEdit } style={this.buttonStyle} type="primary">编辑</Button>
         <Input.Search
           placeholder="搜索"
+          onSearch = { this.handleSearch }
           enterButton
           style={{margin: '5px', width: '300px'}}
         />
