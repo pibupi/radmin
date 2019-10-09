@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
 import { Breadcrumb, Button, Input, Table } from 'antd';
 import { Link } from 'react-router-dom';
+import service from '../../../Service';
 class RoleMgr extends Component {
   state = {
-    roleList: [{
-      id: 5,
-      pid: 0,
-      name: '超级管理员',
-      des: '超级管理员',
-      subon: '2019-05-08 16:54:26',
-      status: 0,
-      del: 0}],
+    params: {
+      _page: 1,
+      _limit: 6,
+      q: '',
+      _sort: 'id',
+      _order: 'desc' 
+    },
+    total: 0,
+    roleList: [],
     columns: [{
       key: 'id',
       dataIndex: 'id',
@@ -30,7 +32,7 @@ class RoleMgr extends Component {
       title: '提交时间'
     }, {
       key: 'pid',
-      dataIndex: 'pid',
+      dataIndex: 'pId',
       title: '父角色'
     }, {
       key: 'del',
@@ -49,6 +51,16 @@ class RoleMgr extends Component {
   handleDelete = () => {}
   handleEdit = () => {}
   handleAdd = () => {}
+  loadData = () => {
+    service
+      .loadRoleList(this.state.params)
+      .then(res => {
+        this.setState({roleList: res.data, total: parseInt(res.headers['x-total-count'])});
+      });
+  }
+  componentDidMount() {
+    this.loadData();
+  }
   buttonStyle ={ margin: '5px'}
 
   render () {
