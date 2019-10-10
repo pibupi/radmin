@@ -42,7 +42,7 @@ class AddPerFrm extends Component {
             }
           ],
         })(
-          <Select defaultValue="router">
+          <Select>
             <Option value="menu">菜单权限</Option>
             <Option value="action">请求权限</Option>
             <Option value="router">路由权限</Option>

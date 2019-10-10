@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Breadcrumb, Input, Button, message, Table } from 'antd';
 import { Link } from 'react-router-dom';
-import { LoadPerAsync }  from '../../../Action/PerAction';
+import { LoadPerAsync, AddPerAsync }  from '../../../Action/PerAction';
 import AddPer from './AddPer';
 
 function mapStateToProps(state) {
@@ -16,6 +16,9 @@ function mapDispatchToProps(dispatch) {
   return {
     loadDataAsync: (params) => {
       dispatch(LoadPerAsync(params));
+    },
+    addPer: (per) => {
+      return dispatch(AddPerAsync(per));
     }
   };
 }
@@ -149,6 +152,7 @@ class PerMgr extends Component {
         <AddPer
           visible={this.state.showAddPerDialog}
           close={this.closeAddPerDialog}
+          addPer={this.props.addPer}
         ></AddPer>
       </div>
     );

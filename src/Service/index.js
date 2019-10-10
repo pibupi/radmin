@@ -33,5 +33,9 @@ export default {
   // 权限相关方法
   loadPerList(params) {
     return axios.get('/per/permission', {params});
+  },
+  // 添加权限的方法
+  addPer(per) {
+    return axios.post('/per/permission', per);
   }
 }
