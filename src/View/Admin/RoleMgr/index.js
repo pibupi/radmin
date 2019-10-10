@@ -64,6 +64,8 @@ class RoleMgr extends Component {
                   .then(res => {
                     message.info('删除成功！');
                     this.loadData();
+                    // 重置当前的selectedRowKeys
+                    this.setState({selectedRowKeys: this.state.selectedRowKeys.filter(item => item !== row.id)});
                   })
                   .catch(err => {
                     console.log(err);
