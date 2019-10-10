@@ -102,7 +102,16 @@ class PerMgr extends Component {
     this.setState({showAddPerDialog: true});
   }
   handleDelete = () => {}
-  handleBarEdit = () => {}
+  handleBarEdit = () => {
+    // 判断当前选中的条数。
+    if(this.state.selectedRowKeys.length !== 1) {
+      message.error('请选择一条进行修改');
+      return;
+    }
+    let editPerId = this.state.selectedRowKeys[0];
+    let editRow = this.props.perList.find(item => item.id === editPerId);
+    this.showEditPer(editRow);
+  }
   handleSearch = (value) => {
     this.setState(preState=> {
       let newState = {...preState};
