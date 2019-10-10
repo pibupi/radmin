@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Breadcrumb, Input, Button, message, Table } from 'antd';
+import { Breadcrumb, Input, Button, message, Table, Popconfirm, Modal } from 'antd';
 import { Link } from 'react-router-dom';
-import { LoadPerAsync, AddPerAsync, EditPerAsync }  from '../../../Action/PerAction';
+import { LoadPerAsync, AddPerAsync, EditPerAsync, DeletePerAsync }  from '../../../Action/PerAction';
 import AddPer from './AddPer';
 import EditPer from './EditPer';
 
@@ -23,6 +23,10 @@ function mapDispatchToProps(dispatch) {
     },
     submitEditPer: (per) => {
       return dispatch(EditPerAsync(per));
+    },
+    submitDeletePer: (ids) => {
+      // 删除数据
+      return dispatch(DeletePerAsync(ids));
     }
   };
 }
@@ -86,12 +90,39 @@ class PerMgr extends Component {
         return (
           <div>
             <Button onClick={() => this.showEditPer(row)} style={{marginRight: '5px'}} type="primary">编辑</Button>
-            <Button type="danger">删除</Button>
+            <Popconfirm
+              title="您是否真要删除吗？"
+              okText="确认"
+              cancelText="取消"
+              onConfirm={() => { 
+                this.deletePerIds([row.id])
+              }}
+            >
+              <Button type="danger">删除</Button>
+            </Popconfirm>
           </div>
         );
       }
     }]
   }
+
+  deletePerIds = (ids) => {
+    console.log(ids);
+    this.props
+    .submitDeletePer(ids)
+    .then(res => {
+      message.info('删除成功！');
+      let arr = this.state.selectedRowKeys;
+      let newArr = arr.filter(item => !ids.includes(item))
+      this.setState({selectedRowKeys: newArr})
+      this.loadData();
+    })
+    .catch(err => {
+      console.log(err);
+      message.error('删除失败！');
+    })
+  }
+
   showEditPer = (per) => {
     this.setState({
       showEditPerDialog: true,
@@ -101,7 +132,20 @@ class PerMgr extends Component {
   handleAdd = () => {
     this.setState({showAddPerDialog: true});
   }
-  handleDelete = () => {}
+  handleDelete = () => {
+    if(this.state.selectedRowKeys.length <= 0) {
+      message.error('请选择数据进行删除!');
+      return;
+    }
+    Modal.confirm({
+      title: '确认要删除吗？',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        this.deletePerIds(this.state.selectedRowKeys);
+      }
+    })
+  }
   handleBarEdit = () => {
     // 判断当前选中的条数。
     if(this.state.selectedRowKeys.length !== 1) {

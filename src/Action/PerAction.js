@@ -47,3 +47,18 @@ export function EditPerAsync(per) {
       });
   }
 }
+export function DeltePer(ids) {
+  return {
+    type: ActionTypes.DELETE_PER_IDS,
+    payload: ids
+  }
+}
+
+export function DeletePerAsync(ids) {
+  return dispatch => {
+    return service.deletePer(ids)
+      .then(res => {
+        dispatch(DeltePer(ids));
+      });
+  }
+}
