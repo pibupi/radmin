@@ -4,6 +4,7 @@ import { Breadcrumb, Input, Button, message, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { LoadPerAsync, AddPerAsync }  from '../../../Action/PerAction';
 import AddPer from './AddPer';
+import EditPer from './EditPer';
 
 function mapStateToProps(state) {
   return {
@@ -26,6 +27,8 @@ function mapDispatchToProps(dispatch) {
 class PerMgr extends Component {
   state = { 
     showAddPerDialog: false,
+    showEditPerDialog: false,
+    editPer: null,              // 当前正在编辑的 权限数据对象
     params: {
       _limit: 6,
       _page: 1,
@@ -50,11 +53,13 @@ class PerMgr extends Component {
       key: 'status',
       dataIndex: 'status',
       title: '权限状态'
-    }, {
-      key: 'subon',
-      dataIndex: 'subon',
-      title: '创建时间'
-    }, {
+    }, 
+    // {
+    //   key: 'subon',
+    //   dataIndex: 'subon',
+    //   title: '创建时间'
+    // }, 
+    {
       key: 'code',
       dataIndex: 'code',
       title: '权限码'
@@ -77,12 +82,18 @@ class PerMgr extends Component {
       render: (del, row) => {
         return (
           <div>
-            <Button style={{marginRight: '5px'}} type="primary">编辑</Button>
+            <Button onClick={() => this.showEditPer(row)} style={{marginRight: '5px'}} type="primary">编辑</Button>
             <Button type="danger">删除</Button>
           </div>
         );
       }
     }]
+  }
+  showEditPer = (per) => {
+    this.setState({
+      showEditPerDialog: true,
+      editPer: per
+    });
   }
   handleAdd = () => {
     this.setState({showAddPerDialog: true});
@@ -106,6 +117,10 @@ class PerMgr extends Component {
 
   closeAddPerDialog = () => {
     this.setState({showAddPerDialog: false});
+  }
+  
+  closeEditPerDialog = () =>  {
+    this.setState({showEditPerDialog: false});
   }
 
   // 生命周期的钩子
@@ -154,6 +169,11 @@ class PerMgr extends Component {
           close={this.closeAddPerDialog}
           addPer={this.props.addPer}
         ></AddPer>
+        <EditPer
+          visible={this.state.showEditPerDialog}
+          close={this.closeEditPerDialog}
+          data={this.state.editPer}
+        />
       </div>
     );
   }
