@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import AddRoleFrm from './AddRoleFrm';
-import { Modal, Form, message } from 'antd';
+import { Modal, Form } from 'antd';
 
 const AddRoleFrmComponent = Form.create({name: 'add_role'})(AddRoleFrm);
 
