@@ -4,14 +4,17 @@ import { Link } from 'react-router-dom';
 import { LoadUserActionAsync } from '../../../Action/UserAction';
 import AddUser from './AddUser';
 import EditUser from './EditUser';
+import SetRole from './SetRole';
 import service from '../../../Service';
 import store from '../../../store';
 
 class UserMgr extends Component {
   state = {
+    showSetRoleDialog: false,  // 显示设置用户角色对话框
     showAddUserDialog: false,  // 显示要添加用户的对话框
     showEditUserDialog: false, // 显示修改的对话框
-    editUserRow: null,         // 当前编辑的用户信息
+    editUserRow: null,         // 当前编辑的用户信息 
+    setRoleUser: null,         // 当前设置角色的用户
     unsubscribe: null,
     selectRowKeys: [],
     userlist: store.getState().UserList.list,
@@ -121,6 +124,9 @@ class UserMgr extends Component {
   hideEditUserDialog = () => {
     this.setState({showEditUserDialog: false});
   }
+  hideSetRoleDialog = () => {
+    this.setState({showSetRoleDialog: false});
+  }
 
   handleDelete = () => {
     if(this.state.selectRowKeys.length <= 0) {
@@ -164,6 +170,15 @@ class UserMgr extends Component {
       editUserRow: editUser
     })
   }
+  handleSetRole = () => {
+    if(this.state.selectRowKeys.length !== 1) {
+      message.error('请选中一条用户进行设置角色!');
+      return;
+    }
+    let setRoleUserId = this.state.selectRowKeys[0];
+    let setRoleUser = this.state.userlist.find(item => item.id === setRoleUserId);
+    this.setState({showSetRoleDialog: true, setRoleUser: setRoleUser});
+  }
   buttonStyle = {margin: '5px'};
 
   render () {
@@ -189,6 +204,7 @@ class UserMgr extends Component {
         <Button onClick={()=> this.setState({showAddUserDialog: true})} style={this.buttonStyle} type="primary">添加</Button>
         <Button onClick={ this.handleDelete } style={this.buttonStyle} type="danger">删除</Button>
         <Button onClick={ this.handleEdit } style={this.buttonStyle} type="primary">编辑</Button>
+        <Button onClick={ this.handleSetRole } style={this.buttonStyle} type="danger">设置角色</Button>
         <Input.Search
           placeholder="搜索"
           onSearch={(value) => {
@@ -215,6 +231,7 @@ class UserMgr extends Component {
         ></Table>
         <AddUser close={this.hideAddUserDialog} visible={this.state.showAddUserDialog}></AddUser>
         <EditUser data={this.state.editUserRow} close={this.hideEditUserDialog} visible={this.state.showEditUserDialog}></EditUser>
+        <SetRole data={this.state.setRoleUser} close={this.hideSetRoleDialog} visible={this.state.showSetRoleDialog} />
       </div>
     )
   }
