@@ -31,3 +31,19 @@ export function AddPerAsync(per) {
       })
   }
 }
+
+export function EditPer(payload) {
+  return {
+    type: ActionTypes.EDIT_PER,
+    payload
+  }
+}
+
+export function EditPerAsync(per) {
+  return dispatch => {
+    return service.editPer(per)
+      .then(res => {
+        dispatch(EditPer(per));
+      });
+  }
+}
