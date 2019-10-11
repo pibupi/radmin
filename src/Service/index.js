@@ -47,5 +47,13 @@ export default {
     return Promise.all(ids.map(id => {
       return axios.delete(`/per/permission/${id}`);
     }));
+  },
+  // 加载所有的角色信息
+  loadAllRoles() {
+    return axios.get('/per/role');
+  },
+  // 加载用户关联的角色信息
+  loadUserRoles(userId) {
+    return axios.get('/per/user_role', { params: { userId}});
   }
 }
