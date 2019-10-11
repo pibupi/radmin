@@ -4,24 +4,40 @@ import service from '../../../Service';
 
 class SetRole extends Component {
   state = {
-    allRoles: [],    // 所有的角色信息的数组
-    userRoles: []    // 当前用户已经管理的所有角色中间表数据
+    allRoles: [],       // 所有的角色信息的数组
+    userRoles: [],      // 当前用户已经管理的所有角色中间表数据
+    allCheckedRole: []  // 当前选中的所有的角色。
   }
-  componentDidMount() {
+  async componentDidMount() {
 
     // this.props.data  => 当前设置角色的用户信息
-    service
-      .loadUserRoles(this.props.data.id)
-      .then(res => {
-        console.log(res.data);
-        this.setState({userRoles: res.data}, () => {
-          // 加载所有的角色
-          service.loadAllRoles()
-          .then(res => {
-            this.setState({allRoles: res.data});
-          });
-        });
-      });
+    let userRoles = await service.loadUserRoles(this.props.data.id);
+    let roles = await service.loadAllRoles();
+    let checkedRoleArr = [];
+
+    // 给已经默认设置了关联的角色添加到 allCheckedRole数组中去。
+    userRoles.data.forEach(userRole => {
+      let roleInfo = roles.data.find(role => role.id === userRole.roleId);
+      if(roleInfo) {
+        checkedRoleArr.push(roleInfo);
+      }
+    })
+    this.setState({userRoles: userRoles.data, allRoles: roles.data, allCheckedRole: checkedRoleArr});
+  }
+
+  handleChangeCheckbox = (role, e) => {
+    // console.log('e.target.checked :', e.target.checked);
+    // console.log('role :', role);
+    let checkedRoleArr = [...this.state.allCheckedRole]
+    if(e.target.checked) {
+      checkedRoleArr.push(role);
+    } else {
+      checkedRoleArr = checkedRoleArr.filter(item => item.id !== role.id);
+    }
+    this.setState({allCheckedRole: checkedRoleArr});
+  }
+  handleSubmitSetRole = () => {
+    console.log(this.state.allCheckedRole);
   }
   render () {
     return (
@@ -32,6 +48,7 @@ class SetRole extends Component {
         cancelText="取消"
         onCancel={() => this.props.close()}
         visible={this.props.visible}
+        onOk={this.handleSubmitSetRole}
       >
         <h3>给用户：{this.props.data ? this.props.data.name : null}  设置角色</h3>
         <hr/>
@@ -44,8 +61,8 @@ class SetRole extends Component {
                 checked = true;
               }
               return (
-                <Col span={8}>
-                  <Checkbox defaultChecked={checked}>{role.name}</Checkbox>
+                <Col span={8} key={role.id}>
+                  <Checkbox onChange={(e) => { this.handleChangeCheckbox(role, e)}} defaultChecked={checked}>{role.name}</Checkbox>
                 </Col>
               );
             })
