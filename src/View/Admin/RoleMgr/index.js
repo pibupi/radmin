@@ -4,11 +4,14 @@ import { Link } from 'react-router-dom';
 import service from '../../../Service';
 import AddRole from './AddRole';
 import EditRole from './EditRole';
+import SetRolePer from './SetRolePer';
 import { formateDate2String } from '../../../Common/Helper';
+
 class RoleMgr extends Component {
   state = {
     showAddRoleDialog: false,
     showEidtRoleDialog: false,
+    showSetRolePerDialog: false,
     selectedRowKeys: [],
     params: {
       _page: 1,
@@ -17,6 +20,7 @@ class RoleMgr extends Component {
       _sort: 'id',
       _order: 'desc' 
     },
+    setRolePer: null,
     total: 0,
     roleList: [],
     columns: [{
@@ -182,6 +186,15 @@ class RoleMgr extends Component {
   closeEditDialog = () => {
     this.setState({showEidtRoleDialog: false});
   }
+  handleSetRolePer = () => {
+    if(this.state.selectedRowKeys.length !== 1) {
+      message.error('请选择一条角色进行设置权限！');
+      return;
+    }
+    // roleId => selectedRowKeys[0]
+    let setRole = this.state.roleList.find(item => item.id === this.state.selectedRowKeys[0]);
+    this.setState({showSetRolePerDialog: true, setRolePer: setRole});
+  }
 
   componentDidMount() {
     this.loadData();
@@ -204,6 +217,7 @@ class RoleMgr extends Component {
         <Button onClick={ this.handleAdd } style={this.buttonStyle} type="primary">添加</Button>
         <Button onClick={ this.handleDelete } style={this.buttonStyle} type="danger">删除</Button>
         <Button onClick={ this.handleBarEdit } style={this.buttonStyle} type="primary">编辑</Button>
+        <Button onClick={ this.handleSetRolePer } style={this.buttonStyle} type="danger">设置权限</Button>
         <Input.Search
           placeholder="搜索"
           onSearch = { this.handleSearch }
@@ -236,6 +250,20 @@ class RoleMgr extends Component {
           data={this.state.editRole}
           saveRole={this.saveRole}
         />
+        <Modal
+          visible={this.state.showSetRolePerDialog}
+          title="设置角色的权限"
+          okText="设置"
+          cancelText="取消"
+          onCancel={()=> this.setState({showSetRolePerDialog: false})}
+        >
+          {
+            this.state.showSetRolePerDialog ?
+              <SetRolePer data={this.state.setRolePer} />
+              :
+              null
+          }
+        </Modal>
       </div>
     )
   }
