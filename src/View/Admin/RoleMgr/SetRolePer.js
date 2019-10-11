@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Row, Col, Checkbox } from 'antd';
+import { Row, Col, Checkbox, message } from 'antd';
+import { formateDate2String } from '../../../Common/Helper';
 import { blue } from '@ant-design/colors';
 import service from '../../../Service';
 
@@ -25,6 +26,42 @@ class SetRolePer extends Component {
     })
     
     this.setState({allPer, rolePer, allCheckedPer})
+  }
+
+  hanldeSubmitSetRolePer = () => {
+    // console.log(12234);
+    let { allCheckedPer, rolePer } = this.state;
+    let promiseArr = [];
+    // 添加的
+    allCheckedPer.forEach((per, index) => {
+      if(rolePer.findIndex(rp => rp.permissionId === per.id) < 0) {
+        // 此时添加
+        promiseArr.push(service.addRolePer({
+          id: Date.now() + index,
+          del: 0,
+          subon: formateDate2String(new Date()),
+          permissionId: per.id,
+          roleId: this.props.data.id
+        }));
+      }
+    })
+    // 删除的
+    rolePer.forEach(rp => {
+      if(allCheckedPer.findIndex(per => per.id === rp.permissionId) < 0) {
+        // 删除
+        promiseArr.push(service.deleteRolePer(rp.id));
+      }
+    });
+
+    Promise.all(promiseArr)
+      .then(res => {
+        message.info('设置成功！');
+        this.props.close();
+      })
+      .catch(err => {
+        console.log('err :', err);
+        message.error('设置失败！');
+      })
   }
 
   handleChangeChecked = (per, e) => {
