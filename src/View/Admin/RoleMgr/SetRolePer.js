@@ -26,6 +26,19 @@ class SetRolePer extends Component {
     
     this.setState({allPer, rolePer, allCheckedPer})
   }
+
+  handleChangeChecked = (per, e) => {
+    let allCheckedPer = [...this.state.allCheckedPer];
+    // 一种选中
+    if(e.target.checked) {
+      allCheckedPer.push(per);
+    } else {
+      // 二中：取消选中
+      allCheckedPer = allCheckedPer.filter(item => item.id !== per.id);
+    }
+    this.setState({allCheckedPer});
+  }
+
   render () {
     let { allPer, rolePer } = this.state;
     return (
@@ -40,7 +53,7 @@ class SetRolePer extends Component {
               checked = index >= 0;
               return (
                 <Col key={per.id} span={8}>
-                  <Checkbox defaultChecked={checked}>{per.des}</Checkbox>
+                  <Checkbox onChange={(e) => {this.handleChangeChecked(per, e)}} defaultChecked={checked}>{per.des}</Checkbox>
                 </Col>
               );
             })
