@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, Row, Col, message, Checkbox } from 'antd'
+import { formateDate2String } from '../../../Common/Helper';
 import { red } from '@ant-design/colors';
 import service from '../../../Service';
 
@@ -10,7 +11,50 @@ class SetPer extends Component {
     allCheckedPer: []   // 所有选中的权限
   }
   handleSubmitSetPer = () => {
+    let  { userPer, allCheckedPer } = this.state;
+    let promiseArr = [];
+    // 添加
+    allCheckedPer.forEach((per, index) => {
+      if(userPer.findIndex(up => up.permissionId === per.id) < 0) {
+        // 新添加
+        promiseArr.push(service.addUserPer({
+          id: Date.now() + index,
+          del: 0,
+          subon: formateDate2String(new Date()),
+          userId: this.props.data.id,
+          permissionId: per.id
+        }));
+      }
+    })
+    // 删除
+    userPer.forEach(up => {
+      if(allCheckedPer.findIndex(per => per.id === up.permissionId) < 0) {
+        // 删除此权限
+        promiseArr.push(service.deleteUserPer(up.id));
+      }
+    });
 
+    Promise.all(promiseArr)
+      .then(res => {
+        message.info('设置成功！');
+        this.props.close();
+      })
+      .catch(err => {
+        console.log('err :', err);
+        message.err('设置失败！');
+      })
+  }
+
+  handleChangePer = (per, e) => {
+    let allCheckedPer = [...this.state.allCheckedPer];
+    if(e.target.checked) {
+      // 添加到allCheckedPer里面去
+      allCheckedPer.push(per);
+    } else {
+      // 从allCheckedPer里面移除
+      allCheckedPer = allCheckedPer.filter(p => per.id !== p.id);
+    }
+    this.setState({allCheckedPer});
   }
   async componentDidMount() {
     // 加载所有的权限
@@ -24,6 +68,7 @@ class SetPer extends Component {
     // allCheckedPer
     this.setState({allPer, userPer, allCheckedPer});
   }
+
   render () {
     let { allPer, userPer } = this.state;
     return (
@@ -45,7 +90,10 @@ class SetPer extends Component {
               checked = userPer.findIndex(up => up.permissionId === per.id) >= 0;
               return (
                 <Col key={per.id} span={8}>
-                  <Checkbox defaultChecked={checked}>{per.des}</Checkbox>
+                  <Checkbox
+                    defaultChecked={checked}
+                    onChange={(e) => {this.handleChangePer(per, e)}}
+                  >{per.des}</Checkbox>
                 </Col>
               );
             })
