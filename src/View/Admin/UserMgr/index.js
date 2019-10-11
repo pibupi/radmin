@@ -5,16 +5,19 @@ import { LoadUserActionAsync } from '../../../Action/UserAction';
 import AddUser from './AddUser';
 import EditUser from './EditUser';
 import SetRole from './SetRole';
+import SetPer from './SetPer';
 import service from '../../../Service';
 import store from '../../../store';
 
 class UserMgr extends Component {
   state = {
     showSetRoleDialog: false,  // 显示设置用户角色对话框
+    showSetPerDialog: false,   // 显示设置用户权限对话框
     showAddUserDialog: false,  // 显示要添加用户的对话框
     showEditUserDialog: false, // 显示修改的对话框
     editUserRow: null,         // 当前编辑的用户信息 
     setRoleUser: null,         // 当前设置角色的用户
+    setPerUser: null,          // 当前设置权限的用户数据
     unsubscribe: null,
     selectRowKeys: [],
     userlist: store.getState().UserList.list,
@@ -127,6 +130,9 @@ class UserMgr extends Component {
   hideSetRoleDialog = () => {
     this.setState({showSetRoleDialog: false});
   }
+  hideSetPerDialog = () => {
+    this.setState({showSetPerDialog: false});
+  }
 
   handleDelete = () => {
     if(this.state.selectRowKeys.length <= 0) {
@@ -179,6 +185,15 @@ class UserMgr extends Component {
     let setRoleUser = this.state.userlist.find(item => item.id === setRoleUserId);
     this.setState({showSetRoleDialog: true, setRoleUser: setRoleUser});
   }
+  handleSetPer = () => {
+    if(this.state.selectRowKeys.length !== 1) {
+      message.error('请选中一条用户进行设置权限!');
+      return;
+    }
+    let setPerUserId = this.state.selectRowKeys[0];
+    let setPerUser = this.state.userlist.find(item => item.id === setPerUserId);
+    this.setState({showSetPerDialog: true, setPerUser: setPerUser});
+  }
   buttonStyle = {margin: '5px'};
 
   render () {
@@ -205,6 +220,7 @@ class UserMgr extends Component {
         <Button onClick={ this.handleDelete } style={this.buttonStyle} type="danger">删除</Button>
         <Button onClick={ this.handleEdit } style={this.buttonStyle} type="primary">编辑</Button>
         <Button onClick={ this.handleSetRole } style={this.buttonStyle} type="danger">设置角色</Button>
+        <Button onClick={ this.handleSetPer } style={this.buttonStyle} type="primary">设置权限</Button>
         <Input.Search
           placeholder="搜索"
           onSearch={(value) => {
@@ -234,6 +250,12 @@ class UserMgr extends Component {
         {
           this.state.showSetRoleDialog ?
             <SetRole data={this.state.setRoleUser} close={this.hideSetRoleDialog} visible={this.state.showSetRoleDialog} />
+            :
+            null
+        }
+        {
+          this.state.showSetPerDialog ?
+            <SetPer data={this.state.setPerUser} close={this.hideSetPerDialog} visible={this.state.showSetPerDialog} />
             :
             null
         }
