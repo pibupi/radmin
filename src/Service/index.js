@@ -90,5 +90,9 @@ export default {
   // 删除用户关联权限
   deleteUserPer(id) {
     return axios.delete(`/per/user_permission/${id}`);
+  },
+  // 加载用户的所有权限
+  loadUserAllPer(id) {
+    return axios.get(`/per/getUserPer/${id}`);
   }
 }

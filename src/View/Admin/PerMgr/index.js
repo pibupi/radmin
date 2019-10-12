@@ -56,21 +56,23 @@ class PerMgr extends Component {
       key: 'des',
       dataIndex: 'des',
       title: '权限描述'
-    }, {
-      key: 'status',
-      dataIndex: 'status',
-      title: '权限状态'
     }, 
+    // {
+    //   key: 'status',
+    //   dataIndex: 'status',
+    //   title: '权限状态'
+    // }, 
     // {
     //   key: 'subon',
     //   dataIndex: 'subon',
     //   title: '创建时间'
     // }, 
+    // {
+    //   key: 'code',
+    //   dataIndex: 'code',
+    //   title: '权限码'
+    // },
     {
-      key: 'code',
-      dataIndex: 'code',
-      title: '权限码'
-    }, {
       key: 'url',
       dataIndex: 'url',
       title: '地址'
@@ -165,7 +167,16 @@ class PerMgr extends Component {
       this.loadData();
     })
   }
-  changePage = (page, pageSize) => {}
+  changePage = (page, pageSize) => {
+    this.setState(preState => {
+      let params = {...preState.params};
+      params._page = page;
+      params._limit = pageSize;
+      return Object.assign({}, preState, {params})
+    }, () => {
+      this.loadData();
+    });
+  }
   loadData = () => {
     this.props.loadDataAsync(this.state.params);
   }

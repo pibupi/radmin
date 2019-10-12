@@ -1,46 +1,69 @@
 import React, { Component } from 'react'
 
 import { Menu, Icon } from 'antd';
+import service from '../../Service';
+import { GetLoginUserInfo } from '../../Common/Auth';
 const { SubMenu } = Menu;
 
 class MenuBar extends Component {
   state = {
-    current: ''
+    current: '',
+    perMenu: []   // 所有当前用户拥有的菜单类型的权限
+  }
+  componentDidMount() {
+    // 加载当前登录用户的所有权限
+    service.loadUserAllPer(GetLoginUserInfo().id)
+      .then(res => {
+        this.setState({perMenu: res.data.filter(m => m.type === 'menu')});
+      })
   }
   handleMenuClick = e => {
     // 控制路由跳转
     this.setState({current: e.key})
-    this.props.history.push(`/home/${e.key}`);
+    // this.props.history.push(`/home/${e.key}`);
+    let url = this.state.perMenu.find(item => item.id == e.key).url;
+    this.props.history.push(url);
+    
   }
   render () {
+    let rootMenu = this.state.perMenu.filter(m => m.pId == 0);
     return (
       <div className="aside-menu-bar">
         <Menu 
           onClick={this.handleMenuClick} 
-          selectedKeys={[this.state.current]}
+          // selectedKeys={[this.state.current]}
           mode="inline"
         >
-          <SubMenu
-            title={
-              <span>
-                <Icon type="pie-chart" />
-                后台管理
-              </span>
-            }
-          >
-            <Menu.Item key="user_mgr"><Icon type="codepen-circle" />用户管理</Menu.Item>
-            <Menu.Item key="role_mgr"> <Icon type="google" />角色管理</Menu.Item>
-            <Menu.Item key="per_mgr"> <Icon type="dribbble" />权限管理</Menu.Item>
-          </SubMenu>
-          <SubMenu
-            title={
-              <span><Icon type="ant-design" />商铺管理</span>
-            }
-          >
-            <Menu.Item key="goods_mgr"><Icon type="bug" />商品管理</Menu.Item>
-            <Menu.Item key="order_mgr"><Icon type="cloud" />订单管理</Menu.Item>
-          </SubMenu>
-
+          {
+            rootMenu.map(rootM => {
+              let childMenus = this.state.perMenu.filter(m => m.pId == rootM.id);
+              childMenus.sort((a, b) => a.order -b.order);
+              return (
+                <SubMenu
+                  key={rootM.id}
+                  title={
+                    <span>
+                      <Icon type="pie-chart" />
+                      {rootM.des}
+                    </span>
+                  }
+                >
+                  {
+                    childMenus.map(childM => {
+                      return (
+                        <Menu.Item key={childM.id}>
+                          <Icon type="codepen-circle" />
+                          {childM.des}
+                        </Menu.Item>
+                      )
+                    })
+                  }
+                </SubMenu>
+              )
+            })
+          }
+          
+          
         </Menu>
       </div>
     )
